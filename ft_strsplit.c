@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 
 static	short	is_ok(char c, char ok)
 {
@@ -54,7 +53,7 @@ char			**ft_strsplit(char const *str, char ok)
 	if (str == NULL)
 		return (0);
 	i[3] = get_count(str, ok);
-	tab = malloc(sizeof(char*) * (i[3] + 1));
+	tab = (char **)malloc(sizeof(char*) * (i[3] + 1));
 	if (tab == 0)
 		return (NULL);
 	i[0] = -1;
@@ -63,7 +62,7 @@ char			**ft_strsplit(char const *str, char ok)
 	{
 		while (!is_ok(str[i[1]], ok))
 			++i[1];
-		tab[i[0]] = malloc(sizeof(char) * get_size(str, i[1], ok));
+		tab[i[0]] = (char *)malloc(sizeof(char) * get_size(str, i[1], ok));
 		while (is_ok(str[i[1]], ok))
 		{
 			tab[i[0]][++i[2]] = str[i[1]];

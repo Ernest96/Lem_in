@@ -2,21 +2,40 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <unistd.h>
-#define AC_RED     "\x1b[31m"
-#define AC_GREEN   "\x1b[32m"
-#define AC_YELLOW  "\x1b[33m"
-#define AC_BLUE    "\x1b[34m"
-#define AC_MAGENTA "\x1b[35m"
-#define AC_CYAN    "\x1b[36m"
-#define AC_RESET   "\x1b[0m"
+#define AC_R     	"\x1b[31m"
+#define AC_G	  	"\x1b[92m"
+#define AC_Y	  	"\x1b[33m"
+#define AC_B    	"\x1b[34m"
+#define AC_M 		"\x1b[35m"
+#define AC_C    	"\x1b[36m"
+#define AC_RES  	"\x1b[0m"
 #define INIT_ATOI int i = 0, nr = 0, n = 0;
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
 
 void	ft_error(void)
 {
-	write(1, AC_RED, 5);
+	write(1, AC_R, 5);
 	write(1, "Error\n", 6);
-	write(1, AC_RESET, 4);
+	write(1, AC_RES, 4);
 	exit(0);
+}
+
+void	ft_putstr(char const *s)
+{
+	int i;
+
+	if (s == NULL)
+		return ;
+	i = 0;
+	while (s[i])
+	{
+		ft_putchar(s[i]);
+		i++;
+	}
 }
 
 size_t	ft_strlen(const char *str)
@@ -129,6 +148,33 @@ int		ft_atoi_check(const char *str)
 	if (n == 1)
 		return (-nr);
 	return (nr);
+}
+
+void	ft_putnbr(int nb)
+{
+	if (nb == 0)
+		ft_putchar('0');
+	else if (nb > 0 && nb < 10)
+	{
+		ft_putchar('0' + nb);
+		return ;
+	}
+	else if (nb == -2147483648)
+	{
+		ft_putchar('-');
+		ft_putnbr(nb / (-10));
+		ft_putchar('0' + 8);
+	}
+	else if (nb < 0)
+	{
+		ft_putchar('-');
+		ft_putnbr(-nb);
+	}
+	else
+	{
+		ft_putnbr(nb / 10);
+		ft_putchar('0' + nb % 10);
+	}
 }
 
 int	ft_strcmp(const char *s1, const char *s2)

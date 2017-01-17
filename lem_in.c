@@ -51,6 +51,13 @@ void	ft_print_farm(int furn, t_room *head)
 	}
 }
 
+void	ft_check_command(int8_t *flag, int8_t to_set)
+{
+	if (*flag)
+		ft_error();
+	*flag = to_set;
+}
+
 void	ft_reset(t_room *temp, int8_t flag) // aici resetam toate flagurile la room la 0, tipa nu e start
 {
 	while (temp)
@@ -130,12 +137,15 @@ void	ft_refresh_node(t_room *temp, char **str, int8_t flag)
 
 }
 
-void	ft_check_coord(t_room *temp, int x, int y)
+void	ft_check_coord(t_room *temp, char *str, int x, int y)
 {
 	while (temp)
 	{
 		if (x == temp->x && y == temp->y)
-			ft_error();
+		{
+			if (ft_strcmp(str, temp->name))
+				ft_error();
+		}
 		temp = temp->next;
 	}
 }
@@ -158,7 +168,7 @@ void	ft_init_start_end(t_room **head, char *line, int8_t flag) // init pentru st
 	ft_reset(temp, flag);
 	while (temp)
 	{
-		ft_check_coord(*head, x, y);
+		ft_check_coord(*head, *str, x, y);
 		if (!ft_strcmp(*str, temp->name)) // daca am gasit un nod cu acest nume, il setam ca start
 		{
 			ft_refresh_node(temp, str, flag);
@@ -190,7 +200,7 @@ void	ft_init_room(t_room **head, char *line) // aici initializam un room simplu,
 	y = ft_atoi_check(*(str + 2));
 	while (temp)
 	{
-		ft_check_coord(*head, x, y);
+		ft_check_coord(*head, *str, x, y);
 		if (!ft_strcmp(*str, temp->name)) // daca am gasit un nod cu acest nume, nu inseram unul nou
 		{
 			ft_refresh_node(temp , str, 0);
@@ -248,9 +258,9 @@ int	main(void)
 		else if (ft_first_check(line))
 				;
 		else if (!ft_strcmp(line, "##start"))
-			flag = 1;
+			ft_check_command(&flag, 1);
 		else if(!ft_strcmp(line, "##end"))
-			flag = 2;
+			ft_check_command(&flag, 2);
 		else if (!flag)
 			ft_init_room(&head, line);
 		else if (flag == 1 || flag == 2)

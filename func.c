@@ -16,9 +16,10 @@ void	ft_putchar(char c)
 	write(1, &c, 1);
 }
 
-void	ft_error(void)
+void	ft_error(int n)
 {
 	write(1, AC_R, 5);
+	printf("\n\n\n%d\n\n\n",n);
 	write(1, "Error\n", 6);
 	write(1, AC_RES, 4);
 	exit(0);
@@ -132,19 +133,19 @@ int		ft_atoi_check(const char *str)
 			(str[i] == '\f') || (str[i] == '\v') || (str[i] == '\r'))
 		i++;
 	if (str[i] == '-')
-		ft_error();
+		ft_error(21);
 	if ((str[i] == '+') || (str[i] == '-'))
 		i++;
 	while (str[i] && (str[i] >= '0') && (str[i] <= '9'))
 	{
 		if (!(str[i] >= '0') && (str[i] <= '9'))
-			ft_error();
+			ft_error(22);
 		nr *= 10;
 		nr += (int)str[i] - '0';
 		i++;
 	}
 	if (str[i] != 0)
-		ft_error();
+		ft_error(23);
 	if (n == 1)
 		return (-nr);
 	return (nr);

@@ -1,8 +1,9 @@
 #include "func.c"
 #include "get_next_line.c"
 #include "ft_strsplit.c"
-#define VAR_INIT char *line; int8_t flag = -1; t_room *head = NULL; int furn;
-#define INIT_FOR_LIST t_room	*temp, *prev; char	**str; int x, y;
+#define VAR_INIT_1 t_room *head = NULL; int furn;
+#define VAR_INIT_2 char *line; int8_t flag = -1; t_room *head = NULL; 
+#define INIT_FOR_LIST t_room	*temp, *prev; char	**str; uint8_t x, y;
 #define W_S write(1, AC_G, 5); write(1, "##start\n", 8); write(1, AC_RES, 4); 
 #define	W_E write(1, AC_C, 5); write(1, "##end\n", 6); write(1, AC_RES, 4);
 #define W_F write(1, AC_Y, 5); ft_putnbr(furn); write(1, AC_RES, 4); 
@@ -11,8 +12,8 @@ typedef struct 	s_room
 {
 	char *name;
 	int8_t type;
-	int8_t x;
-	int8_t y;
+	uint8_t x;
+	uint8_t y;
 	struct s_room *next;
 }				t_room;
 
@@ -243,15 +244,15 @@ void	ft_check_possible(t_room *head)
 		ft_error();
 }
 
-int	main(void)
+t_room *get_farm(int *furn)
 {
-	VAR_INIT;
+	VAR_INIT_2;
 	while(get_next_line(0, &line))
 	{	
 		if (flag == -1)
 		{
-			furn = ft_atoi_check(line);
-			if (!furn)
+			*furn = ft_atoi_check(line);
+			if (!(*furn))
 				ft_error();
 			flag = 0;
 		}
@@ -270,6 +271,13 @@ int	main(void)
 		}
 		free(line);
 	}
+	return (head);
+}
+
+int	main(void)
+{
+	VAR_INIT_1;
+	head = get_farm(&furn);
 	ft_check_possible(head); // aici facem check daca avem start si end
 	ft_print_farm(furn, head);
 	ft_free_list(&head);

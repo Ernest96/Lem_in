@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include "header.h"
 #define CH		char buff[BUFF_SIZE], *temp;
 #define HEAD	static t_list *head = NULL;
 #define INIT	CH int nr; t_list *final; static int fd2 = -1; HEAD

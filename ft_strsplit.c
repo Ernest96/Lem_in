@@ -1,17 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strsplit.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ebitca <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/10/22 13:29:00 by ebitca            #+#    #+#             */
-/*   Updated: 2016/10/22 13:29:01 by ebitca           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include "header.h"
 
-
-static	short	is_ok(char c, char ok)
+short	is_ok(char c, char ok)
 {
 	if (c && c != '\t' && c != '\n' && c != ok)
 		return (1);
@@ -19,7 +8,7 @@ static	short	is_ok(char c, char ok)
 		return (0);
 }
 
-static	int		get_count(char const *str, char ok)
+int		get_count(char const *str, char ok)
 {
 	int i;
 	int count;
@@ -32,7 +21,7 @@ static	int		get_count(char const *str, char ok)
 	return (count);
 }
 
-static	int		get_size(char const *str, int i, char ok)
+int		get_size(char const *str, int i, char ok)
 {
 	int size;
 

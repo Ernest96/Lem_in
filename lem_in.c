@@ -1,6 +1,8 @@
 #include "func.c"
 #include "get_next_line.c"
 #include "ft_strsplit.c"
+#include <limits.h>
+#include <stdio.h>
 #define VAR_INIT_1 t_room *head = NULL; int furn; g_rel = 0; g_tab = NULL;
 #define VAR_INIT_2 char *line; int8_t flag = -1; t_room *head = NULL; 
 #define INIT_FOR_LIST t_room	*temp, *prev; char	**str; uint8_t x, y;
@@ -12,6 +14,7 @@ int8_t	g_rel;
 int **g_tab;
 char **g_names;
 int g_count;
+int g_m = 0;
 
 typedef struct 	s_room
 {
@@ -259,7 +262,10 @@ void	ft_res_array()
 	{
 		j = -1;
 		while(++j < g_count)
-			g_tab[i][j] = 0;
+			if ( i!= j)
+				g_tab[i][j] = 9999;
+			else
+				g_tab[i][j] = 0;
 	}
 }
 void	ft_create_array(t_room *room)
@@ -383,15 +389,109 @@ t_room *get_farm(int *furn)
 	return (head);
 }
 
+
+int ft_min(int x, int y)
+{
+	if (x < y)
+		return (x);
+	else
+		return (y);
+}
+
+int	find_min(int *D, int vertices, bool *marked, int *M)
+{
+	int min = INT_MAX;
+	int v;
+
+	for (int i = 0; i < vertices; i++)
+		if (D[i] < min && marked[i] == 0)
+			{
+				v = i;
+				min = D[i];
+			}
+	M[g_m++] = v;
+	marked[v] = 1;
+	return v;
+}
+
+void	find_path(int **D, int vert, int i, int *M)
+{
+	if (vert == 0)
+	{
+		return ;
+	}
+	if (D[vert - 1][i] != D[vert][i])
+	{
+		find_path(D, vert - 1, M[vert], M);
+		printf("%d ", M[vert] + 1);
+	}
+	else
+		find_path(D, vert - 1, i, M);
+}
+
+void	Dijkstra(int **D, int vertices, int start)
+{
+	int *M;
+	int v;
+	int temp;
+	bool *marked;
+
+	M = (int*)calloc(vertices, sizeof(int));
+	marked = (bool*)calloc(vertices, sizeof(bool));
+	g_m = 0;
+	for (int k = 0; k < vertices; k++)
+	{
+		if (k == 0)
+		{
+			ft_memcpy(D[k], g_tab[start], sizeof(int) * vertices);
+			M[g_m++] = start;
+			marked[start] = 1;
+			v = find_min(D[k], vertices, marked, M);
+		}
+		else
+			{
+		for(int i = 0; i < vertices; i++)
+		if (marked[i] == 0)
+		D[k][i] = ft_min(D[k - 1][i], D[k-1][v] + g_tab[v][i]);
+				else
+			D[k][i] = D[k - 1][i];
+			v = find_min(D[k], vertices, marked, M);
+			}
+		
+	}
+	--g_m;
+	for (int i = 0; i < vertices; i++)
+	{
+		if (i == start)
+			continue ;
+		printf("%d ", start + 1);		
+		find_path(D, vertices - 1, i, M);
+		printf("%d\n", i + 1);		
+	}
+}
+
+void	ft_create_D(int ***D)
+{
+	int i;
+
+	*D = (int**)malloc(sizeof(int*) * g_count);
+	i = -1;
+	while (++i < g_count)
+		*(*D + i) = (int*)malloc(sizeof(int) * g_count);
+}
+
+
+
 int	main(void)
 {
-	sleep(5);
 	VAR_INIT_1;
+	int **D;
 	head = get_farm(&furn);
 	ft_check_possible(head); // aici facem check daca avem start si end
 	ft_print_farm(furn, head);
-	sleep(5);
 	ft_free_list(&head);
 	print_array();
-	sleep(5);
+	ft_create_D(&D);
+	int start = 0; // socoate startu de la + 1 !!!!!!!!!!!!
+	Dijkstra(D, g_count, start);
 }

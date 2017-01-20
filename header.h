@@ -21,9 +21,11 @@
 #define C_REL char *temp; char **str; t_room *room; int8_t count;
 int8_t	g_rel;
 int **g_tab;
+int *g_path;
 char **g_names;
 int g_count;
 int g_m;
+int g_p;
 
 typedef struct 	s_room
 {
@@ -39,11 +41,11 @@ void	ft_init_room(t_room **head, char *line);
 void	ft_create_array(t_room *room);
 void	print_array(void);
 t_room *get_farm(int *furn);
-int	find_min(int *d, int vertices, int8_t *marked, int *m);
+int	find_min(int *d, int8_t *marked, int *m);
 void	find_path(int **d, int vert, int i, int *m);
-void	dijkstra(int **d, int vertices, int start, int end);
+void	dijkstra(int **d, int start, int end);
 int ft_min(int x, int y);
-void	ft_create_d(int ***d);
+void	ft_create_d_path(int ***d);
 int8_t ft_first_check(char *line);
 void	ft_check_possible(t_room *head);
 void	ft_res_array(void);

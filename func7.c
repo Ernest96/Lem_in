@@ -8,7 +8,7 @@ int ft_min(int x, int y)
 		return (y);
 }
 
-void	ft_create_d(int ***d)
+void	ft_create_d_path(int ***d)
 {
 	int i;
 
@@ -16,4 +16,5 @@ void	ft_create_d(int ***d)
 	i = -1;
 	while (++i < g_count)
 		*(*d + i) = (int*)malloc(sizeof(int) * g_count);
+	g_path = (int*)malloc(sizeof(int) * g_count);
 }

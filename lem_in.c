@@ -105,7 +105,7 @@ void	print_array()
 	{
 		j = -1;
 		while(++j < g_count)
-			printf("%10d",g_tab[i][j]);
+			printf("%7d",g_tab[i][j]);
 		printf("\n");
 	}
 }
@@ -142,7 +142,7 @@ t_room *get_farm(int *furn)
 	return (head);
 }
 
-int	find_min(int *d, int vertices, int8_t *marked, int *m)
+int	find_min(int *d, int8_t *marked, int *m)
 {
 	int min;
 	int v;
@@ -150,7 +150,7 @@ int	find_min(int *d, int vertices, int8_t *marked, int *m)
 
 	min = INT_MAX;
 	i = -1;
-	while (++i < vertices)	
+	while (++i < g_count)	
 		if (d[i] < min && marked[i] == 0)
 			{
 				v = i;
@@ -170,68 +170,66 @@ void	find_path(int **d, int vert, int i, int *m)
 	if (d[vert - 1][i] != d[vert][i])
 	{
 		find_path(d, vert - 1, m[vert], m);
-		ft_putstr(g_names[m[vert]]);
-		write(1, " " , 1);
+		g_path[g_p++] = m[vert];
 	}
 	else
 		find_path(d, vert - 1, i, m);
 }
 
-int *get_m(int vertices)
+int *get_m()
 {
 	int i;
 	int *m;
 
-	m = (int*)malloc(sizeof(int) * vertices);
+	m = (int*)malloc(sizeof(int) * g_count);
 	i = -1;
-	while (++i < vertices)
+	while (++i < g_count)
 		*(m + i) = 0;
 	return (m);
 }
 
-int8_t *get_marked(int vertices)
+int8_t *get_marked()
 {
 	int i;
 	int8_t *marked;
 
-	marked = (int8_t*)malloc(sizeof(int8_t) * vertices);
+	marked = (int8_t*)malloc(sizeof(int8_t) * g_count);
 	i = -1;
-	while (++i < vertices)
+	while (++i < g_count)
 		*(marked + i) = 0;
 	return (marked);
 }
 
-void	dijkstra(int **d, int vertices, int start, int end)
+void	dijkstra(int **d, int start, int end)
 {
 	INIT_DIJKSTRA;
-	m = get_m(vertices);
-	marked = get_marked(vertices);
-	while (++k < vertices)
+	m = get_m(g_count);
+	marked = get_marked();
+	while (++k < g_count)
 	{
 		if (k == 0)
 		{
-			ft_memcpy(d[k], g_tab[start], sizeof(int) * vertices);
+			ft_memcpy(d[k], g_tab[start], sizeof(int) * g_count);
 			m[g_m++] = start;
 			marked[start] = 1;
-			v = find_min(d[k], vertices, marked, m);
+			v = find_min(d[k], marked, m);
 		}
 		else
 		{
 			i = -1;
-			while (++i < vertices)
+			while (++i < g_count)
 				if (marked[i] == 0)
 					d[k][i] = ft_min(d[k - 1][i], d[k-1][v] + g_tab[v][i]);
 				else
 					d[k][i] = d[k - 1][i];
-			v = find_min(d[k], vertices, marked, m);
+			v = find_min(d[k], marked, m);
 		}	
 	}
 	--g_m;
-	ft_putstr(g_names[start]);
-	write(1, " ", 1);
-	find_path(d, vertices - 1, end, m);
-	ft_putstr(g_names[end]);
-	write(1, " \n", 2);
+	g_p = 0;
+	g_path[g_p++] = start;
+	find_path(d, g_count - 1, end, m);
+	g_path[g_p++] = end;
 }
 
 void	ft_get_start_end(t_room *head, int *start, int *end, int i)
@@ -262,12 +260,23 @@ void	ft_get_start_end(t_room *head, int *start, int *end, int i)
 	}
 }
 
+void	ft_print_path(void)
+{
+	int i;
+
+	i = -1;
+	while (++i < g_p)
+		printf("%s ", g_names[g_path[i]]);
+	printf("\n");
+}
+
 int	main(void)
 {
 	VAR_INIT_1;
 	int **d;
 	int start;
 	int end;
+	int *path;
 	head = get_farm(&furn);
 	if (!g_rel)
 		ft_error(27);
@@ -275,7 +284,8 @@ int	main(void)
 	ft_print_farm(furn, head);
 	print_array();
 	ft_get_start_end(head, &start, &end, -1);
-		ft_free_list(&head);
-	ft_create_d(&d);
-	dijkstra(d, g_count, start, end);
+	ft_free_list(&head);
+	ft_create_d_path(&d);
+	dijkstra(d, start, end);
+	ft_print_path();
 }

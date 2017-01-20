@@ -1,4 +1,5 @@
 #include "header.h"
+#define INIT_DIJKSTRA int *m; int v; int k = -1; int i = -1; int8_t *marked;
 
 void	ft_init_start_end(t_room **head, char *line, int8_t flag) // init pentru start (flagul 1)
 {
@@ -141,82 +142,100 @@ t_room *get_farm(int *furn)
 	return (head);
 }
 
-int	find_min(int *D, int vertices, int8_t *marked, int *M)
+int	find_min(int *d, int vertices, int8_t *marked, int *m)
 {
-	int min = INT_MAX;
+	int min;
 	int v;
+	int i;
 
-	for (int i = 0; i < vertices; i++)
-		if (D[i] < min && marked[i] == 0)
+	min = INT_MAX;
+	i = -1;
+	while (++i < vertices)	
+		if (d[i] < min && marked[i] == 0)
 			{
 				v = i;
-				min = D[i];
+				min = d[i];
 			}
-	M[g_m++] = v;
+	m[g_m++] = v;
 	marked[v] = 1;
-	return v;
+	return (v);
 }
 
-void	find_path(int **D, int vert, int i, int *M)
+void	find_path(int **d, int vert, int i, int *m)
 {
 	if (vert == 0)
 	{
 		return ;
 	}
-	if (D[vert - 1][i] != D[vert][i])
+	if (d[vert - 1][i] != d[vert][i])
 	{
-		find_path(D, vert - 1, M[vert], M);
-		printf("%s ", g_names[M[vert]]);
+		find_path(d, vert - 1, m[vert], m);
+		ft_putstr(g_names[m[vert]]);
+		write(1, " " , 1);
 	}
 	else
-		find_path(D, vert - 1, i, M);
+		find_path(d, vert - 1, i, m);
 }
 
-void	Dijkstra(int **D, int vertices, int start)
+int *get_m(int vertices)
 {
-	int *M;
-	int v;
-	int temp;
+	int i;
+	int *m;
+
+	m = (int*)malloc(sizeof(int) * vertices);
+	i = -1;
+	while (++i < vertices)
+		*(m + i) = 0;
+	return (m);
+}
+
+int8_t *get_marked(int vertices)
+{
+	int i;
 	int8_t *marked;
 
-	M = (int*)calloc(vertices, sizeof(int));
-	marked = (int8_t*)calloc(vertices, sizeof(int8_t));
-	g_m = 0;
-	for (int k = 0; k < vertices; k++)
+	marked = (int8_t*)malloc(sizeof(int8_t) * vertices);
+	i = -1;
+	while (++i < vertices)
+		*(marked + i) = 0;
+	return (marked);
+}
+
+void	dijkstra(int **d, int vertices, int start, int end)
+{
+	INIT_DIJKSTRA;
+	m = get_m(vertices);
+	marked = get_marked(vertices);
+	while (++k < vertices)
 	{
 		if (k == 0)
 		{
-			ft_memcpy(D[k], g_tab[start], sizeof(int) * vertices);
-			M[g_m++] = start;
+			ft_memcpy(d[k], g_tab[start], sizeof(int) * vertices);
+			m[g_m++] = start;
 			marked[start] = 1;
-			v = find_min(D[k], vertices, marked, M);
+			v = find_min(d[k], vertices, marked, m);
 		}
 		else
-			{
-		for(int i = 0; i < vertices; i++)
-		if (marked[i] == 0)
-		D[k][i] = ft_min(D[k - 1][i], D[k-1][v] + g_tab[v][i]);
+		{
+			i = -1;
+			while (++i < vertices)
+				if (marked[i] == 0)
+					d[k][i] = ft_min(d[k - 1][i], d[k-1][v] + g_tab[v][i]);
 				else
-			D[k][i] = D[k - 1][i];
-			v = find_min(D[k], vertices, marked, M);
-			}
-		
+					d[k][i] = d[k - 1][i];
+			v = find_min(d[k], vertices, marked, m);
+		}	
 	}
 	--g_m;
-	for (int i = 0; i < vertices; i++)
-	{
-		if (i == start)
-			continue ;
-		printf("%s ", g_names[start]);		
-		find_path(D, vertices - 1, i, M);
-		printf("%s\n", g_names[i]);		
-	}
+	ft_putstr(g_names[start]);
+	write(1, " ", 1);
+	find_path(d, vertices - 1, end, m);
+	ft_putstr(g_names[end]);
+	write(1, " \n", 2);
 }
 
-void	ft_get_start_end(t_room *head, int *start, int *end)
+void	ft_get_start_end(t_room *head, int *start, int *end, int i)
 {
-	int i;
-
 	while (head)
 	{
 		if (head->type == 1)
@@ -246,7 +265,7 @@ void	ft_get_start_end(t_room *head, int *start, int *end)
 int	main(void)
 {
 	VAR_INIT_1;
-	int **D;
+	int **d;
 	int start;
 	int end;
 	head = get_farm(&furn);
@@ -255,8 +274,8 @@ int	main(void)
 	ft_check_possible(head); // aici facem check daca avem start si end
 	ft_print_farm(furn, head);
 	print_array();
-	ft_get_start_end(head, &start, &end);
+	ft_get_start_end(head, &start, &end, -1);
 		ft_free_list(&head);
-	ft_create_D(&D);
-	Dijkstra(D, g_count, start);
+	ft_create_d(&d);
+	dijkstra(d, g_count, start, end);
 }

@@ -8,12 +8,12 @@ int ft_min(int x, int y)
 		return (y);
 }
 
-void	ft_create_D(int ***D)
+void	ft_create_d(int ***d)
 {
 	int i;
 
-	*D = (int**)malloc(sizeof(int*) * g_count);
+	*d = (int**)malloc(sizeof(int*) * g_count);
 	i = -1;
 	while (++i < g_count)
-		*(*D + i) = (int*)malloc(sizeof(int) * g_count);
+		*(*d + i) = (int*)malloc(sizeof(int) * g_count);
 }

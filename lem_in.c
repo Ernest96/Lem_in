@@ -324,7 +324,7 @@ int	ft_simulate(int **paths, int furn, int end)
 	while (sim[end] != f_temp)
 	{
 		i = -1;
-		while (++i < 3)
+		while (*(paths + ++i))
 		{
 			j = paths[i][0];
 			while(--j > 1)
@@ -440,11 +440,9 @@ int	main(void)
 	paths = (int **)malloc(sizeof(int*) * 4);
 	paths[0] = (int*)malloc(sizeof(int) * 10);
 	paths[1] = (int*)malloc(sizeof(int) * 10);
-	paths[2] = (int*)malloc(sizeof(int) * 10);
 	paths[0][0] = 4; paths[0][1] = 0; paths[0][2] = 1; paths[0][3] = 6; paths[0][4] = 7;
 	paths[1][0] = 4; paths[1][1] = 0; paths[1][2] = 2; paths[1][3] = 5; paths[1][4] = 7;
-	paths[2][0] = 5; paths[2][1] = 0; paths[2][2] = 3; paths[2][3] = 4; paths[2][4] = 5; paths[2][5] = 7;
-	paths[3] = NULL;
+	paths[2] = NULL;
 	int n = ft_simulate(paths, 20, 7);
 	printf("\n\n\nsteps: = %d\n\n",n);
 }

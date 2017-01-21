@@ -309,7 +309,7 @@ void	reset_sim(int *sim)
 		sim[i] = 0;
 }
 
-int	ft_simulate(int **paths, int furn)
+int	ft_simulate(int **paths, int furn, int end)
 {
 	int *sim;
 	int step;
@@ -324,7 +324,7 @@ int	ft_simulate(int **paths, int furn)
 	while (sim[end] != f_temp)
 	{
 		i = -1;
-		while (*(paths + ++i))
+		while (++i < 2)
 		{
 			j = paths[i][0];
 			while(--j > 1)
@@ -335,7 +335,7 @@ int	ft_simulate(int **paths, int furn)
 					sim[paths[i][j-1]] = 0;
 				}
 			}
-			if (furn >= paths[i][0] - path[0][0] && furn)
+			if (furn >= paths[i][0] - paths[0][0] && furn)
 			{
 				if(sim[paths[i][1]] == 0)
 				{
@@ -346,7 +346,7 @@ int	ft_simulate(int **paths, int furn)
 		}
 		++step;
 	}
-	copy_back(); //Copiaza din g_tab in g_temp toate elementele (Back up)
+//	copy_back(); //Copiaza din g_tab in g_temp toate elementele (Back up)
 
 }
 
@@ -359,18 +359,18 @@ int	try_all(int **paths, int furn, int start, int end)
 
 	flag2 = 0;
 	temp_path = paths;
-	if(flag == 0 && flag2 = 1)
-		g_step = ft_simulate(paths, furn);
+	if(flag == 0 && (flag2 = 1))
+		g_step = ft_simulate(paths, furn, end);
 	else
 	{
-		n = ft_simulate(paths);
-		if(g_step > n && flag2 = 1)
+		n = ft_simulate(paths, furn, end);
+		if(g_step > n && (flag2 = 1))
 			g_step = n;
 	}
-	while((temp_path = find_another(temp_path)))
+	while(1)//(temp_path = find_another(temp_path)))
 	{
-		n = ft_simulate(temp_path);
-		if(g_step > n && flag2 = 1)
+		n = ft_simulate(temp_path, furn, end);
+		if(g_step > n && (flag2 = 1))
 		{
 			g_step = n;
 			paths = temp_path;
@@ -391,10 +391,10 @@ void	lem_in(int start, int end, int furn, int **d)
 	while (ft_check_solution(start, end, paths[nr - 1]))
 	{
 		flag = try_all(paths, furn, start, end);
-		mark_node();
-		if(!flag)
-			delete_node();
-		add_path();
+//		mark_node();
+		if(!flag);
+		//	delete_node();
+//		add_path();
 		if(flag)
 			nr++;
 	}
@@ -407,7 +407,7 @@ int	main(void)
 	int start;
 	int end;
 
-	head = get_farm(&furn);
+/*	head = get_farm(&furn);
 	if (!g_rel)
 		ft_error(27);
 	ft_check_possible(head); // aici facem check daca avem start si end
@@ -420,5 +420,9 @@ int	main(void)
 	if (!ft_check_solution(start, end, g_path))
 		ft_error(9999);
 	ft_print_path();
-	lem_in(start, end, furn, d);
+	lem_in(start, end, furn, d);*/
+
+	int paths[3][10] = {{3, 0, 1, 2}, {4, 0, 3 , 4, 2}};
+	int n = ft_simulate(paths, 10, 2);
+	printf("\n\n\n%d\n\n",n);
 }

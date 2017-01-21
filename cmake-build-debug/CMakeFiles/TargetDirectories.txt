@@ -1,0 +1,3 @@
+/home/Provorny/21_lemin/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/Provorny/21_lemin/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/Provorny/21_lemin/cmake-build-debug/CMakeFiles/21_lemin.dir

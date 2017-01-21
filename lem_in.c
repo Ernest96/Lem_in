@@ -331,23 +331,35 @@ int	ft_simulate(int **paths, int furn, int end)
 			{
 				if(sim[paths[i][j]] == i+1)
 				{
-					sim[paths[i][j+1]] = i+1;
-					sim[paths[i][j]] = 0;
+					if(paths[i][j+1] == end)
+					{
+						printf("L%d-%d ",paths[i][j],paths[i][j+1]);
+						sim[paths[i][j + 1]]++;
+						sim[paths[i][j]] = 0;
+					}
+					else
+					{
+						printf("L%d-%d ",paths[i][j],paths[i][j+1]);
+						sim[paths[i][j + 1]] = i+1;
+						sim[paths[i][j]] = 0;
+					}
 				}
 			}
 			if ((furn >= paths[i][0] - paths[0][0]) && furn)
 			{
 				if(sim[paths[i][2]] == 0)
 				{
-				sim[paths[i][1]] = i+1;
+				printf("L%d-%d ",paths[i][1],paths[i][2]);
+				sim[paths[i][2]] = i+1;
 				--furn;
 				}
 			}
 		}
 		++step;
+		printf("\n");
 	}
 //	copy_back(); //Copiaza din g_tab in g_temp toate elementele (Back up)
-
+	return(step);
 }
 
 int	try_all(int **paths, int furn, int start, int end)
@@ -432,5 +444,5 @@ int	main(void)
 	paths[1][0] = 4; paths[1][1] = 0; paths[1][2] = 3; paths[1][3] = 4; paths[1][4] = 2;
 	paths[2] = NULL;
 	int n = ft_simulate(paths, 10, 2);
-	printf("\n\n\n%d\n\n",n);
+	printf("\n\n\nsteps: = %d\n\n",n);
 }

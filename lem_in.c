@@ -164,9 +164,7 @@ int	find_min(int *d, int8_t *marked, int *m)
 void	find_path(int **d, int vert, int i, int *m)
 {
 	if (vert == 0)
-	{
 		return ;
-	}
 	if (d[vert - 1][i] != d[vert][i])
 	{
 		find_path(d, vert - 1, m[vert], m);
@@ -203,13 +201,13 @@ int8_t *get_marked()
 void	dijkstra(int **d, int start, int end)
 {
 	INIT_DIJKSTRA;
-	m = get_m(g_count);
+	m = get_m();
 	marked = get_marked();
 	while (++k < g_count)
 	{
 		if (k == 0)
 		{
-			ft_memcpy(d[k], g_tab[start], sizeof(int) * g_count);
+			ft_memcpy(d[k], g_temp[start], sizeof(int) * g_count);
 			m[g_m++] = start;
 			marked[start] = 1;
 			v = find_min(d[k], marked, m);
@@ -219,7 +217,7 @@ void	dijkstra(int **d, int start, int end)
 			i = -1;
 			while (++i < g_count)
 				if (marked[i] == 0)
-					d[k][i] = ft_min(d[k - 1][i], d[k-1][v] + g_tab[v][i]);
+					d[k][i] = ft_min(d[k - 1][i], d[k-1][v] + g_temp[v][i]);
 				else
 					d[k][i] = d[k - 1][i];
 			v = find_min(d[k], marked, m);
@@ -270,13 +268,145 @@ void	ft_print_path(void)
 	printf("\n");
 }
 
+int	ft_check_solution(int start, int end, int *path)
+{
+	int i;
+
+	i = -1;
+	if(g_path == path)
+	{
+		if(*path== start && *(path + 1) == end)
+		if (g_temp[start][end] == 9999)
+			return (0);
+	}
+	if(*(path + 1) == start && *(path + 2) == end)
+		if (g_temp[start][end] == 9999)
+			return (0);
+	return (1);
+}
+
+int	**ft_init_path(void)
+{
+	int **paths;
+	int i;
+
+	i = 0;
+	paths = (int**)malloc(sizeof(int *) * 2);
+	*paths = (int*)malloc(sizeof(int) * (g_p + 1));
+	paths[0][0] = g_p;
+	while(++i <= g_p)
+		paths[0][i] = g_path[i-1];
+	paths[1] = NULL;
+	return(paths);
+}
+
+void	reset_sim(int *sim)
+{
+	int i;
+
+	i = -1;
+	while (++i < g_count)
+		sim[i] = 0;
+}
+
+int	ft_simulate(int **paths, int furn)
+{
+	int *sim;
+	int step;
+	int i;
+	int j;
+	int f_temp;
+
+	step = 0;
+	f_temp = furn;
+	sim = (int*)malloc(sizeof(int) * g_count);
+	reset_sim(sim);
+	while (sim[end] != f_temp)
+	{
+		i = -1;
+		while (*(paths + ++i))
+		{
+			j = paths[i][0];
+			while(--j > 1)
+			{
+				if(sim[paths[i][j]] == 0)
+				{
+					sim[paths[i][j]] = i+1;
+					sim[paths[i][j-1]] = 0;
+				}
+			}
+			if (furn >= paths[i][0] - path[0][0] && furn)
+			{
+				if(sim[paths[i][1]] == 0)
+				{
+				sim[paths[i][1]] = i+1;
+				--furn;
+				}
+			}
+		}
+		++step;
+	}
+	copy_back(); //Copiaza din g_tab in g_temp toate elementele (Back up)
+
+}
+
+int	try_all(int **paths, int furn, int start, int end)
+{
+	int n;
+	int **temp_path;
+	static int flag = 0;
+	int flag2;
+
+	flag2 = 0;
+	temp_path = paths;
+	if(flag == 0 && flag2 = 1)
+		g_step = ft_simulate(paths, furn);
+	else
+	{
+		n = ft_simulate(paths);
+		if(g_step > n && flag2 = 1)
+			g_step = n;
+	}
+	while((temp_path = find_another(temp_path)))
+	{
+		n = ft_simulate(temp_path);
+		if(g_step > n && flag2 = 1)
+		{
+			g_step = n;
+			paths = temp_path;
+		}
+	}
+	flag++;
+	return(flag2);
+}
+
+void	lem_in(int start, int end, int furn, int **d)
+{
+	int **paths;
+	int nr;
+	int flag;
+
+	paths = ft_init_path();
+	nr = 1;
+	while (ft_check_solution(start, end, paths[nr - 1]))
+	{
+		flag = try_all(paths, furn, start, end);
+		mark_node();
+		if(!flag)
+			delete_node();
+		add_path();
+		if(flag)
+			nr++;
+	}
+}
+
 int	main(void)
 {
 	VAR_INIT_1;
 	int **d;
 	int start;
 	int end;
-	int *path;
+
 	head = get_farm(&furn);
 	if (!g_rel)
 		ft_error(27);
@@ -287,5 +417,8 @@ int	main(void)
 	ft_free_list(&head);
 	ft_create_d_path(&d);
 	dijkstra(d, start, end);
+	if (!ft_check_solution(start, end, g_path))
+		ft_error(9999);
 	ft_print_path();
+	lem_in(start, end, furn, d);
 }

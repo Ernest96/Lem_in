@@ -26,6 +26,8 @@ char **g_names;
 int g_count;
 int g_m;
 int g_p;
+int **g_temp;
+int	g_step;
 
 typedef struct 	s_room
 {

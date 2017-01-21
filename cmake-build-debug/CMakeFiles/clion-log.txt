@@ -1,1 +1,0 @@
-CMakeLists.txt not found in C:\cygwin64\home\Provorny\21_lemin

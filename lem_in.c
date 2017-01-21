@@ -324,7 +324,7 @@ int	ft_simulate(int **paths, int furn, int end)
 	while (sim[end] != f_temp)
 	{
 		i = -1;
-		while (++i < 2)
+		while (++i < 3)
 		{
 			j = paths[i][0];
 			while(--j > 1)
@@ -337,7 +337,7 @@ int	ft_simulate(int **paths, int furn, int end)
 						sim[paths[i][j + 1]]++;
 						sim[paths[i][j]] = 0;
 					}
-					else
+					else if(sim[paths[i][j+1]] == 0)
 					{
 						printf("L%d-%d ",paths[i][j],paths[i][j+1]);
 						sim[paths[i][j + 1]] = i+1;
@@ -418,7 +418,7 @@ int	main(void)
 	int **d;
 	int start;
 	int end;
-	g_count = 5;
+	g_count = 8;
 
 /*	head = get_farm(&furn);
 	if (!g_rel)
@@ -437,12 +437,14 @@ int	main(void)
 
 //	int paths[3][10] = {{3, 0, 1, 2}, {4, 0, 3 , 4, 2}};
 	int **paths;
-	paths = (int **)malloc(sizeof(int*) * 3);
+	paths = (int **)malloc(sizeof(int*) * 4);
 	paths[0] = (int*)malloc(sizeof(int) * 10);
 	paths[1] = (int*)malloc(sizeof(int) * 10);
-	paths[0][0] = 3; paths[0][1] = 0; paths[0][2] = 1; paths[0][3] = 2;
-	paths[1][0] = 4; paths[1][1] = 0; paths[1][2] = 3; paths[1][3] = 4; paths[1][4] = 2;
-	paths[2] = NULL;
-	int n = ft_simulate(paths, 10, 2);
+	paths[2] = (int*)malloc(sizeof(int) * 10);
+	paths[0][0] = 4; paths[0][1] = 0; paths[0][2] = 1; paths[0][3] = 6; paths[0][4] = 7;
+	paths[1][0] = 4; paths[1][1] = 0; paths[1][2] = 2; paths[1][3] = 5; paths[1][4] = 7;
+	paths[2][0] = 5; paths[2][1] = 0; paths[2][2] = 3; paths[2][3] = 4; paths[2][4] = 5; paths[2][5] = 7;
+	paths[3] = NULL;
+	int n = ft_simulate(paths, 20, 7);
 	printf("\n\n\nsteps: = %d\n\n",n);
 }

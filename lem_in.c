@@ -202,6 +202,7 @@ void	dijkstra(int **d, int start, int end)
 {
 	INIT_DIJKSTRA;
 	m = get_m();
+	g_m = 0;
 	marked = get_marked();
 	while (++k < g_count)
 	{
@@ -262,9 +263,10 @@ void	ft_print_path(void)
 	int i;
 
 	i = -1;
+	printf("am intrat\n");
 	while (++i < g_p)
 		printf("%s ", g_names[g_path[i]]);
-	printf("\n");
+	printf("stop\n");
 }
 
 int	ft_check_solution_1(int start, int end, int *path)
@@ -278,13 +280,13 @@ int	ft_check_solution_1(int start, int end, int *path)
 int	ft_check_solution_2(int start, int end, int *path)
 {
 	int i;
-	printf("\n\nHello\n\n");
-	i = -1;
+	i = -1;	
 //	while(++i < 5)
-//		printf("Nodul [%d] = %s\n",i,g_names[path[i]]);
+//		printf("Nodul [%d] = %s\n",i,g_names[path[i]]);	
 	if(*(path + 1) == start && *(path + 2) == end)
 		if (g_temp[start][end] == 9999)
 			return (0);
+
 	return (1);
 }
 
@@ -299,7 +301,7 @@ int	**ft_init_path(int start)
 	i = 0;
 	j = -1;
 	while (++j < g_count)
-		if (g_temp[start][j] && g_temp[start][j] != 9999)
+		if (g_temp[start][j] == 1)
 			++n;
 
 	paths = (int**)malloc(sizeof(int *) * (n + 1));
@@ -370,7 +372,6 @@ int	ft_simulate(int **paths, int furn, int end)
 		++step;
 		printf("\n");
 	}
-//	copy_back(); //Copiaza din g_tab in g_temp toate elementele (Back up)
 	return(step);
 }
 
@@ -421,7 +422,7 @@ int **copy_in_lpath(int **paths, int k)
 	while(++i < k)
 	i = 0;
 	found_path[k-1][0] = g_p;
-	while(++i < g_p)
+	while(++i <= g_p)
 		found_path[k-1][i] = g_path[i-1];
 	return (found_path);
 }
@@ -456,7 +457,7 @@ int **find_another(int **paths, int start, int end)
 						found_path = copy_in_lpath(paths, k);
 				}
 		}
-	}	
+	}
 	return (found_path);
 }
 
@@ -493,7 +494,7 @@ int	try_all(int **paths, int furn, int start, int end)
 			g_step = n;
 	}
 	while(temp_path = find_another(temp_path, start, end))
-	{
+	{		
 		n = ft_simulate(temp_path, furn, end);
 		if(g_step > n && (flag2 = 1))
 		{
@@ -504,6 +505,7 @@ int	try_all(int **paths, int furn, int start, int end)
 	}
 	flag++;
 	copy_back();
+	printf("flag2 = %d\n", flag2);
 	return(flag2);
 }
 
@@ -512,8 +514,10 @@ void	delete_node(int **paths)
 	int i;
 
 	i = -1;
+	printf("BANG BANG BATYA V ZDANIE\n");
 	while(paths[++i])
 		;
+	printf("i = %d\n", i);
 	g_tab[paths[i-1][1]][paths[i -1][2]] = 9999;
 	g_tab[paths[i-1][2]][paths[i -1][1]] = 9999;
 	paths[i-1] = NULL;
@@ -526,18 +530,16 @@ void	add_path(int **paths, int start, int end)
 
 	g_p = 0;
 	dijkstra(g_d, start, end);
-	for (int i = 0; i < g_p; ++i)
-		printf(" %s\n", g_names[g_path[i]]);
 	i = 0;
 	k = -1;
 	while (paths[++k])
 		;
-	paths[k] = (int*)malloc(sizeof(int) * g_count);
-	paths[k][0] = g_p - 1;
+	paths[k] = (int*)malloc(sizeof(int) * (g_count + 1));
+	ft_print_path();
+	paths[k][0] = g_p;
 	while (++i <= g_p)
 		paths[k][i] = g_path[i-1];
-	paths[k + 1] = NULL;
-
+	paths[k + 1] = NULL;	
 }
 
 void	lem_in(int start, int end, int furn)
@@ -545,21 +547,20 @@ void	lem_in(int start, int end, int furn)
 	int **paths;
 	int nr;
 	int flag;
+	static int cont = 0;
 
 	paths = ft_init_path(start);
 	nr = 1;
 	while (ft_check_solution_2(start, end, paths[nr - 1]))
 	{
+
 		flag = try_all(paths, furn, start, end);
 		mark_node(paths, 0, 0, 0);
-		if(!flag);
-			delete_node(paths);
+		if(flag == 0)
+			delete_node(paths);			
 		add_path(paths, start, end);
 		if(flag)
 			nr++;
-		for(int i=0; i<5;i++)
-			printf("Nodul [%d] = %s\n",i,g_names[paths[nr-1][i]]);
-		printf("e ok\n");
 	}
 }
 
@@ -582,13 +583,8 @@ int	main(void)
 	dijkstra(g_d, start, end);
 	ft_print_path();
 	printf("________\n");
-	g_temp[0][1] = 9999;
-	g_temp[1][0] = 9999;
-	dijkstra(g_d, start, end);
-	ft_print_path();
 	if (!ft_check_solution_1(start, end, g_path))
 		ft_error(9999);
-	ft_print_path();
 	lem_in(start, end, furn);
 	printf("\n\n\nstep = %d\n\n\n", g_step);
 }

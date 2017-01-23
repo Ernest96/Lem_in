@@ -224,7 +224,6 @@ void	dijkstra(int **d, int start, int end)
 		}	
 	}
 	--g_m;
-	g_p = 0;
 	g_path[g_p++] = start;
 	find_path(d, g_count - 1, end, m);
 	g_path[g_p++] = end;
@@ -268,32 +267,45 @@ void	ft_print_path(void)
 	printf("\n");
 }
 
-int	ft_check_solution(int start, int end, int *path)
+int	ft_check_solution_1(int start, int end, int *path)
 {
-	int i;
-
-	i = -1;
-	if(g_path == path)
-	{
-		if(*path== start && *(path + 1) == end)
+	if(*path== start && *(path + 1) == end)
 		if (g_temp[start][end] == 9999)
 			return (0);
-	}
+	return(1);
+}
+
+int	ft_check_solution_2(int start, int end, int *path)
+{
+	int i;
+	printf("\n\nHello\n\n");
+	i = -1;
+//	while(++i < 5)
+//		printf("Nodul [%d] = %s\n",i,g_names[path[i]]);
 	if(*(path + 1) == start && *(path + 2) == end)
 		if (g_temp[start][end] == 9999)
 			return (0);
 	return (1);
 }
 
-int	**ft_init_path(void)
+int	**ft_init_path(int start)
 {
 	int **paths;
 	int i;
+	int j;
+	int n;
 
+	n = 0;
 	i = 0;
-	paths = (int**)malloc(sizeof(int *) * 2);
-	*paths = (int*)malloc(sizeof(int) * (g_p + 1));
-	paths[0][0] = g_p;
+	j = -1;
+	while (++j < g_count)
+		if (g_temp[start][j] && g_temp[start][j] != 9999)
+			++n;
+
+	paths = (int**)malloc(sizeof(int *) * (n + 1));
+	j = -1;
+	*paths  = (int*)malloc(sizeof(int) * (g_count + 1));
+	paths[0][0] = g_p - 1;
 	while(++i <= g_p)
 		paths[0][i] = g_path[i-1];
 	paths[1] = NULL;
@@ -326,20 +338,20 @@ int	ft_simulate(int **paths, int furn, int end)
 		i = -1;
 		while (*(paths + ++i))
 		{
-			j = paths[i][0];
+			j = paths[i][0] + 1;
 			while(--j > 1)
 			{
 				if(sim[paths[i][j]] == i+1)
 				{
 					if(paths[i][j+1] == end)
 					{
-						printf("L%d-%d ",paths[i][j],paths[i][j+1]);
+						printf("L%d-%d ",paths[i][j]+1,paths[i][j+1]+1);
 						sim[paths[i][j + 1]]++;
 						sim[paths[i][j]] = 0;
 					}
 					else if(sim[paths[i][j+1]] == 0)
 					{
-						printf("L%d-%d ",paths[i][j],paths[i][j+1]);
+						printf("L%d-%d ",paths[i][j]+1,paths[i][j+1]+1);
 						sim[paths[i][j + 1]] = i+1;
 						sim[paths[i][j]] = 0;
 					}
@@ -349,7 +361,7 @@ int	ft_simulate(int **paths, int furn, int end)
 			{
 				if(sim[paths[i][2]] == 0)
 				{
-				printf("L%d-%d ",paths[i][1],paths[i][2]);
+				printf("L%d-%d ",paths[i][1]+1,paths[i][2]+1);
 				sim[paths[i][2]] = i+1;
 				--furn;
 				}
@@ -362,6 +374,106 @@ int	ft_simulate(int **paths, int furn, int end)
 	return(step);
 }
 
+void mark_node(int **paths, int option, int to_mark, int prev)
+{
+	int k;
+	int i;
+
+	k = -1;
+	i = -1;
+	while (paths[++k])
+		;
+	if(option == 0)
+	{
+		while(++i < k)
+		{
+			g_temp[paths[i][1]][paths[i][2]] = 9999;
+			g_temp[paths[i][2]][paths[i][1]] = 9999;
+		}
+	}
+	else
+	{
+		g_temp[paths[k-1][1]][paths[k-1][2]] = 9999;
+		g_temp[paths[k-1][1]][paths[k-1][2]] = 9999;
+		g_temp[to_mark][prev] = 9999;
+		g_temp[prev][to_mark] = 9999;
+	}
+}
+
+int **copy_in_lpath(int **paths, int k)
+{
+	int i;
+	int j;
+	int **found_path;
+
+	i = -1;
+	found_path = (int**)malloc(sizeof(int*)*(k+1));
+	while(++i < k)
+		found_path[i] = (int*)malloc(sizeof(int) * g_count);
+	i = -1;
+	while(++i < k)
+	{
+		j = -1;
+		while(++j < paths[i][0] + 1)
+			found_path[i][j] = paths[i][j];
+	}
+	found_path[k] = NULL;
+	while(++i < k)
+	i = 0;
+	found_path[k-1][0] = g_p;
+	while(++i < g_p)
+		found_path[k-1][i] = g_path[i-1];
+	return (found_path);
+}
+
+int **find_another(int **paths, int start, int end)
+{
+	int i;
+	int j;
+	int k;
+	int m;
+	int **found_path;
+
+	k = -1;
+	i = 1;
+	found_path = NULL;
+	while (paths[++k])
+		;
+	while (++i < paths[k-1][0])
+	{
+		j = -1;
+		while (++j < k - 1)
+		{
+			m = 1;
+			while (++m < paths[j][0])
+				if (paths[k - 1][i] == paths[j][m])
+				{
+					mark_node(paths, 1, paths[j][m], paths[k-1][i-1]);
+					g_p = 0; //De facut inainte de fiecare Dijkstra
+					g_path[g_p++] = start;
+					dijkstra(g_d, paths[k-1][2], end);
+					if (ft_check_solution_2(start, end, g_path))
+						found_path = copy_in_lpath(paths, k);
+				}
+		}
+	}	
+	return (found_path);
+}
+
+void copy_back(void)
+{
+	int i;
+	int j;
+
+	i = -1;
+	while(++i < g_count)
+	{
+		j = -1;
+		while(++j < g_count)
+			g_temp[i][j] = g_tab[i][j];
+	}
+}
+
 int	try_all(int **paths, int furn, int start, int end)
 {
 	int n;
@@ -370,6 +482,7 @@ int	try_all(int **paths, int furn, int start, int end)
 	int flag2;
 
 	flag2 = 0;
+	printf("\n\nflag = %d\n\n",flag);
 	temp_path = paths;
 	if(flag == 0 && (flag2 = 1))
 		g_step = ft_simulate(paths, furn, end);
@@ -379,7 +492,7 @@ int	try_all(int **paths, int furn, int start, int end)
 		if(g_step > n && (flag2 = 1))
 			g_step = n;
 	}
-	while(1)//(temp_path = find_another(temp_path)))
+	while(temp_path = find_another(temp_path, start, end))
 	{
 		n = ft_simulate(temp_path, furn, end);
 		if(g_step > n && (flag2 = 1))
@@ -387,40 +500,76 @@ int	try_all(int **paths, int furn, int start, int end)
 			g_step = n;
 			paths = temp_path;
 		}
+		//free la temp_path
 	}
 	flag++;
+	copy_back();
 	return(flag2);
 }
 
-void	lem_in(int start, int end, int furn, int **d)
+void	delete_node(int **paths)
+{
+	int i;
+
+	i = -1;
+	while(paths[++i])
+		;
+	g_tab[paths[i-1][1]][paths[i -1][2]] = 9999;
+	g_tab[paths[i-1][2]][paths[i -1][1]] = 9999;
+	paths[i-1] = NULL;
+}
+
+void	add_path(int **paths, int start, int end)
+{
+	int i;
+	int k;
+
+	g_p = 0;
+	dijkstra(g_d, start, end);
+	for (int i = 0; i < g_p; ++i)
+		printf(" %s\n", g_names[g_path[i]]);
+	i = 0;
+	k = -1;
+	while (paths[++k])
+		;
+	paths[k] = (int*)malloc(sizeof(int) * g_count);
+	paths[k][0] = g_p - 1;
+	while (++i <= g_p)
+		paths[k][i] = g_path[i-1];
+	paths[k + 1] = NULL;
+
+}
+
+void	lem_in(int start, int end, int furn)
 {
 	int **paths;
 	int nr;
 	int flag;
 
-	paths = ft_init_path();
+	paths = ft_init_path(start);
 	nr = 1;
-	while (ft_check_solution(start, end, paths[nr - 1]))
+	while (ft_check_solution_2(start, end, paths[nr - 1]))
 	{
 		flag = try_all(paths, furn, start, end);
-//		mark_node();
+		mark_node(paths, 0, 0, 0);
 		if(!flag);
-		//	delete_node();
-//		add_path();
+			delete_node(paths);
+		add_path(paths, start, end);
 		if(flag)
 			nr++;
+		for(int i=0; i<5;i++)
+			printf("Nodul [%d] = %s\n",i,g_names[paths[nr-1][i]]);
+		printf("e ok\n");
 	}
 }
 
 int	main(void)
 {
 	VAR_INIT_1;
-	int **d;
 	int start;
 	int end;
-	g_count = 8;
 
-/*	head = get_farm(&furn);
+	head = get_farm(&furn);
 	if (!g_rel)
 		ft_error(27);
 	ft_check_possible(head); // aici facem check daca avem start si end
@@ -428,21 +577,18 @@ int	main(void)
 	print_array();
 	ft_get_start_end(head, &start, &end, -1);
 	ft_free_list(&head);
-	ft_create_d_path(&d);
-	dijkstra(d, start, end);
-	if (!ft_check_solution(start, end, g_path))
+	ft_create_d_path();
+	g_p = 0;
+	dijkstra(g_d, start, end);
+	ft_print_path();
+	printf("________\n");
+	g_temp[0][1] = 9999;
+	g_temp[1][0] = 9999;
+	dijkstra(g_d, start, end);
+	ft_print_path();
+	if (!ft_check_solution_1(start, end, g_path))
 		ft_error(9999);
 	ft_print_path();
-	lem_in(start, end, furn, d);*/
-
-//	int paths[3][10] = {{3, 0, 1, 2}, {4, 0, 3 , 4, 2}};
-	int **paths;
-	paths = (int **)malloc(sizeof(int*) * 4);
-	paths[0] = (int*)malloc(sizeof(int) * 10);
-	paths[1] = (int*)malloc(sizeof(int) * 10);
-	paths[0][0] = 4; paths[0][1] = 0; paths[0][2] = 1; paths[0][3] = 6; paths[0][4] = 7;
-	paths[1][0] = 4; paths[1][1] = 0; paths[1][2] = 2; paths[1][3] = 5; paths[1][4] = 7;
-	paths[2] = NULL;
-	int n = ft_simulate(paths, 20, 7);
-	printf("\n\n\nsteps: = %d\n\n",n);
+	lem_in(start, end, furn);
+	printf("\n\n\nstep = %d\n\n\n", g_step);
 }

@@ -27,6 +27,7 @@ int g_count;
 int g_m;
 int g_p;
 int **g_temp;
+int **g_d;
 int	g_step;
 
 typedef struct 	s_room
@@ -47,7 +48,7 @@ int	find_min(int *d, int8_t *marked, int *m);
 void	find_path(int **d, int vert, int i, int *m);
 void	dijkstra(int **d, int start, int end);
 int ft_min(int x, int y);
-void	ft_create_d_path(int ***d);
+void	ft_create_d_path();
 int8_t ft_first_check(char *line);
 void	ft_check_possible(t_room *head);
 void	ft_res_array(void);

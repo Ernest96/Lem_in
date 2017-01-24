@@ -284,8 +284,11 @@ int	ft_check_solution_2(int start, int end, int *path)
 //	while(++i < 5)
 //		printf("Nodul [%d] = %s\n",i,g_names[path[i]]);	
 	if(*(path + 1) == start && *(path + 2) == end)
+	{
+		printf("\nHELLO\n");
 		if (g_temp[start][end] == 9999)
 			return (0);
+	}
 
 	return (1);
 }
@@ -307,7 +310,7 @@ int	**ft_init_path(int start)
 	paths = (int**)malloc(sizeof(int *) * (n + 1));
 	j = -1;
 	*paths  = (int*)malloc(sizeof(int) * (g_count + 1));
-	paths[0][0] = g_p - 1;
+	paths[0][0] = g_p;
 	while(++i <= g_p)
 		paths[0][i] = g_path[i-1];
 	paths[1] = NULL;
@@ -347,13 +350,13 @@ int	ft_simulate(int **paths, int furn, int end)
 				{
 					if(paths[i][j+1] == end)
 					{
-						printf("L%d-%d ",paths[i][j]+1,paths[i][j+1]+1);
+						printf("L%d-%d ",paths[i][j],paths[i][j+1]);
 						sim[paths[i][j + 1]]++;
 						sim[paths[i][j]] = 0;
 					}
-					else if(sim[paths[i][j+1]] == 0)
+					else if(sim[paths[i][j+1]] == 0 && paths[i][j] != end)
 					{
-						printf("L%d-%d ",paths[i][j]+1,paths[i][j+1]+1);
+						printf("L%d-%d ",paths[i][j],paths[i][j+1]);
 						sim[paths[i][j + 1]] = i+1;
 						sim[paths[i][j]] = 0;
 					}
@@ -363,7 +366,7 @@ int	ft_simulate(int **paths, int furn, int end)
 			{
 				if(sim[paths[i][2]] == 0)
 				{
-				printf("L%d-%d ",paths[i][1]+1,paths[i][2]+1);
+				printf("L%d-%d ",paths[i][1],paths[i][2]);
 				sim[paths[i][2]] = i+1;
 				--furn;
 				}
@@ -372,6 +375,7 @@ int	ft_simulate(int **paths, int furn, int end)
 		++step;
 		printf("\n");
 	}
+	printf("\nstep = %d\n", step);
 	return(step);
 }
 
@@ -419,7 +423,6 @@ int **copy_in_lpath(int **paths, int k)
 			found_path[i][j] = paths[i][j];
 	}
 	found_path[k] = NULL;
-	while(++i < k)
 	i = 0;
 	found_path[k-1][0] = g_p;
 	while(++i <= g_p)
@@ -427,6 +430,15 @@ int **copy_in_lpath(int **paths, int k)
 	return (found_path);
 }
 
+void	print_g_temp(void)
+{
+	for(int i=0; i<g_count; i++)
+	{
+		for(int j=0; j<g_count; j++)
+			printf("%10d",g_temp[i][j]);
+		printf("\n");
+	}
+}
 int **find_another(int **paths, int start, int end)
 {
 	int i;
@@ -442,22 +454,32 @@ int **find_another(int **paths, int start, int end)
 		;
 	while (++i < paths[k-1][0])
 	{
+		printf("\ni = %d\n",i);
 		j = -1;
 		while (++j < k - 1)
 		{
+			printf("j = %d\n",j);
 			m = 1;
 			while (++m < paths[j][0])
+			{
+				printf("m = %d\n",m);
 				if (paths[k - 1][i] == paths[j][m])
 				{
+					printf("\n\n");
 					mark_node(paths, 1, paths[j][m], paths[k-1][i-1]);
 					g_p = 0; //De facut inainte de fiecare Dijkstra
 					g_path[g_p++] = start;
 					dijkstra(g_d, paths[k-1][2], end);
-					if (ft_check_solution_2(start, end, g_path))
+					printf("DRumul gasit another: ");
+					for(int i = 0; i<g_p; i++)
+						printf("%5d",g_path[i]);
+					if (!(g_path[2] == end))
 						found_path = copy_in_lpath(paths, k);
 				}
+			}
 		}
 	}
+	printf("\nI checked %d indexes\n\n",paths[k-1][0]);
 	return (found_path);
 }
 
@@ -475,7 +497,7 @@ void copy_back(void)
 	}
 }
 
-int	try_all(int **paths, int furn, int start, int end)
+int	try_all(int ***paths, int furn, int start, int end)
 {
 	int n;
 	int **temp_path;
@@ -484,12 +506,12 @@ int	try_all(int **paths, int furn, int start, int end)
 
 	flag2 = 0;
 	printf("\n\nflag = %d\n\n",flag);
-	temp_path = paths;
+	temp_path = *paths;
 	if(flag == 0 && (flag2 = 1))
-		g_step = ft_simulate(paths, furn, end);
+		g_step = ft_simulate(*paths, furn, end);
 	else
 	{
-		n = ft_simulate(paths, furn, end);
+		n = ft_simulate(*paths, furn, end);
 		if(g_step > n && (flag2 = 1))
 			g_step = n;
 	}
@@ -498,8 +520,9 @@ int	try_all(int **paths, int furn, int start, int end)
 		n = ft_simulate(temp_path, furn, end);
 		if(g_step > n && (flag2 = 1))
 		{
+			printf("\n\nTOT NORMAL AM INTRAT\n\n");
 			g_step = n;
-			paths = temp_path;
+			*paths = temp_path;
 		}
 		//free la temp_path
 	}
@@ -551,10 +574,10 @@ void	lem_in(int start, int end, int furn)
 
 	paths = ft_init_path(start);
 	nr = 1;
-	while (ft_check_solution_2(start, end, paths[nr - 1]))
+	while (ft_check_solution_2(start, end, paths[nr - 1])) //Nu lucreaza ft_check2
 	{
 
-		flag = try_all(paths, furn, start, end);
+		flag = try_all(&paths, furn, start, end);
 		mark_node(paths, 0, 0, 0);
 		if(flag == 0)
 			delete_node(paths);			
@@ -562,6 +585,7 @@ void	lem_in(int start, int end, int furn)
 		if(flag)
 			nr++;
 	}
+
 }
 
 int	main(void)
@@ -586,5 +610,4 @@ int	main(void)
 	if (!ft_check_solution_1(start, end, g_path))
 		ft_error(9999);
 	lem_in(start, end, furn);
-	printf("\n\n\nstep = %d\n\n\n", g_step);
 }

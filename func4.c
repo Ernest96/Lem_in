@@ -28,16 +28,14 @@ char **ft_split_check(char *line)
 	char **str;
 
 	str = ft_strsplit(line, ' ');
-
 	if (*str == NULL)
-		ft_error(3);
+		ft_error();
 	if (*(str + 1) == NULL)
-		ft_error(4);
+		ft_error();
 	if (*(str + 2) == NULL)
-		ft_error(5);
+		ft_error();
 	if (*(str + 3) != NULL)
-		ft_error(6);
-
+		ft_error();
 	return (str);
 }
 

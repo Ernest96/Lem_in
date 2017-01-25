@@ -33,11 +33,8 @@ void	ft_print_farm(int furn, t_room *head)
 	write(1, "\n", 1);
 	W_S;
 	temp = head;
-	printf("asdsadasda\n");
-	
 	while (temp->type != 1)
 		temp = temp->next;
-
 	ft_print_room(temp);
 	W_E;
 	temp = head;

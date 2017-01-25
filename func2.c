@@ -71,19 +71,19 @@ int		ft_atoi_check(const char *str)
 			(str[i] == '\f') || (str[i] == '\v') || (str[i] == '\r'))
 		i++;
 	if (str[i] == '-')
-		ft_error(21);
+		ft_error();
 	if ((str[i] == '+') || (str[i] == '-'))
 		i++;
 	while (str[i] && (str[i] >= '0') && (str[i] <= '9'))
 	{
 		if (!(str[i] >= '0') && (str[i] <= '9'))
-			ft_error(22);
+			ft_error();
 		nr *= 10;
 		nr += (int)str[i] - '0';
 		i++;
 	}
 	if (str[i] != 0)
-		ft_error(23);
+		ft_error();
 	if (n == 1)
 		return (-nr);
 	return (nr);

@@ -3,7 +3,7 @@
 int8_t ft_first_check(char *line)
 {
 	if (*line == 0)
-			ft_error(10);
+			ft_error();
 	if (*line == '#' && *(line + 1) != '#')
 		return (1);
 	return (0);
@@ -25,7 +25,7 @@ void	ft_check_possible(t_room *head)
 		head = head->next;
 	}
 	if (start == 0 || end == 0)
-		ft_error(11);
+		ft_error();
 }
 
 void	ft_res_array()
@@ -71,12 +71,12 @@ void	ft_create_relation(t_room *head, char *line)
 	C_REL;
 	temp = ft_strchr(line, '-');
 	if (ft_strchr(++temp, '-'))
-		ft_error(12);
+		ft_error();
 	if (!g_rel)
 		ft_create_array(head);
 	str = ft_strsplit(line, '-');
 	if (*str == NULL || *(str + 1) == NULL)
-		ft_error(13);
+		ft_error();
 	room = head;
 	count = 0;
 	while (room)
@@ -86,7 +86,7 @@ void	ft_create_relation(t_room *head, char *line)
 		room = room->next;
 	}
 	if (count != 2)
-		ft_error(14);
+		ft_error();
 	ft_insert(str);
 	ft_free_split(&str);
 }

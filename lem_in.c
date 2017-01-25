@@ -181,7 +181,7 @@ void mark_node(int **paths, int option, int to_mark, int prev)
 	else
 	{
 		g_temp[paths[k-1][1]][paths[k-1][2]] = 9999;
-		g_temp[paths[k-1][1]][paths[k-1][2]] = 9999;
+		g_temp[paths[k-1][2]][paths[k-1][1]] = 9999;
 		g_temp[to_mark][prev] = 9999;
 		g_temp[prev][to_mark] = 9999;
 	}

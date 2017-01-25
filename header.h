@@ -29,6 +29,7 @@ int g_p;
 int **g_temp;
 int **g_d;
 int	g_step;
+int *g_pos;
 
 typedef struct 	s_room
 {
@@ -73,7 +74,7 @@ char	*ft_strjoin(char const *s1, char const *s2);
 int		ft_atoi_check(const char *str);
 void	ft_putnbr(int nb);
 void	ft_putchar(char c);
-void	ft_error(int n);
+void	ft_error();
 void	ft_putstr(char const *s);
 size_t	ft_strlen(const char *str);
 void	*ft_memcpy(void *dest, const void *src, size_t n);

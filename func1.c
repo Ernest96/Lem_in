@@ -5,10 +5,9 @@ void	ft_putchar(char c)
 	write(1, &c, 1);
 }
 
-void	ft_error(int n)
+void	ft_error()
 {
 	write(1, AC_R, 5);
-	printf("\n\n\n%d\n\n\n",n);
 	write(1, "Error\n", 6);
 	write(1, AC_RES, 4);
 	exit(0);

@@ -13,7 +13,8 @@ int		try_all(int ***paths, int furn, int start, int end)
 		if(g_step > n && (flag2 = 1))
 			g_step = n;
 	}
-	while(temp_path = find_another(temp_path, start, end))
+	temp_path = find_another(temp_path, start, end);
+	while(temp_path)
 	{		
 		n = ft_simulate(temp_path, furn, end, 0);
 		if(g_step > n && (flag2 = 1))
@@ -21,6 +22,7 @@ int		try_all(int ***paths, int furn, int start, int end)
 			g_step = n;
 			*paths = temp_path;
 		}
+		temp_path = find_another(temp_path, start, end);
 	}
 	flag++;
 	copy_back();

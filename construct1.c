@@ -97,7 +97,7 @@ t_room *get_farm(int *furn)
 		else if (ft_strchr(line, '-') && !flag)
 			ft_create_relation(head, line);
 		else if (ft_first_check(line))
-				;
+			;
 		else if (!ft_strcmp(line, "##start") && !g_rel)
 			ft_check_command(&flag, 1);
 		else if(!ft_strcmp(line, "##end") && !g_rel)

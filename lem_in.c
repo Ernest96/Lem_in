@@ -9,6 +9,7 @@ int	ft_simulate(int **paths, int furn, int end, int8_t param)
 		{
 			while (--j > 1)
 				if (sim[paths[i][j]] == i + 1 && paths[i][j] != end)
+				{
 					if (paths[i][j + 1] == end)
 					{
 						C1;
@@ -17,11 +18,8 @@ int	ft_simulate(int **paths, int furn, int end, int8_t param)
 					{
 						C2;
 					}
-			if ((furn >= paths[i][0] - paths[0][0]) && furn)
-				if (sim[paths[i][2]] == 0 || paths[i][2] == end)
-				{
-					C3;
 				}
+				CHECK;
 		}
 		TO_PRINT;
 	}

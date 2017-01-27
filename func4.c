@@ -13,7 +13,7 @@ void	ft_free_list(t_room **head)
 	}
 }
 
-void	ft_init_node(t_room **temp, char **str) // functie de initializare a nodului
+void	ft_init_node(t_room **temp, char **str)
 {
 	(*temp)->next = (t_room*)malloc(sizeof(t_room));
 	*temp = (*temp)->next;
@@ -23,7 +23,7 @@ void	ft_init_node(t_room **temp, char **str) // functie de initializare a nodulu
 	(*temp)->next = NULL;
 }
 
-char **ft_split_check(char *line)
+char 	**ft_split_check(char *line)
 {
 	char **str;
 

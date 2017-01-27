@@ -1,6 +1,6 @@
 #include "header.h"
 
-int	find_min(int *d, int8_t *marked, int *m)
+int		find_min(int *d, int8_t *marked, int *m)
 {
 	int min;
 	int v;
@@ -32,7 +32,7 @@ void	find_path(int **d, int vert, int i, int *m)
 		find_path(d, vert - 1, i, m);
 }
 
-int *get_m()
+int 	*get_m()
 {
 	int i;
 	int *m;
@@ -44,10 +44,10 @@ int *get_m()
 	return (m);
 }
 
-int8_t *get_marked()
+int8_t 	*get_marked()
 {
-	int i;
-	int8_t *marked;
+	int 	i;
+	int8_t	*marked;
 
 	marked = (int8_t*)malloc(sizeof(int8_t) * g_count);
 	i = -1;

@@ -50,6 +50,9 @@
 #define C33 C32 		if (param == 1) ft_put_change(paths[i][2]);
 #define C3  C33  		--furn; ++n;
 #define TO_PRINT 		if (param == 1) ft_putchar('\n'); ++step;
+#define CHECK1  		if ((furn >= paths[i][0] - paths[0][0]) && furn)
+#define CHECK2  		CHECK1 if (sim[paths[i][2]] == 0 || paths[i][2] == end)
+#define CHECK 			CHECK2 { C3; }
 
 int8_t					g_rel;
 int 					**g_tab;

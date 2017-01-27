@@ -57,7 +57,7 @@ void	ft_check_command(int8_t *flag, int8_t to_set)
 	*flag = to_set;
 }
 
-void	ft_reset(t_room *temp, int8_t flag) // aici resetam toate flagurile la room la 0, tipa nu e start
+void	ft_reset(t_room *temp, int8_t flag)
 {
 	while (temp)
 	{

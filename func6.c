@@ -1,9 +1,9 @@
 #include "header.h"
 
-int8_t ft_first_check(char *line)
+int8_t	ft_first_check(char *line)
 {
 	if (*line == 0)
-			ft_error();
+		ft_error();
 	if (*line == '#' && *(line + 1) != '#')
 		return (1);
 	return (0);
@@ -81,7 +81,7 @@ void	ft_create_relation(t_room *head, char *line)
 	count = 0;
 	while (room)
 	{
-		if(!ft_strcmp(room->name, *str) || !ft_strcmp(room->name, *(str + 1)))
+		if (!ft_strcmp(room->name, *str) || !ft_strcmp(room->name, *(str + 1)))
 			++count;
 		room = room->next;
 	}

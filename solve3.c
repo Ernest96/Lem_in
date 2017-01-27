@@ -35,7 +35,7 @@ void 	mark_node(int **paths, int option, int to_mark, int prev)
 	}
 }
 
-int **copy_in_lpath(int **paths, int k)
+int 	**copy_in_lpath(int **paths, int k)
 {
 	int i;
 	int j;
@@ -60,7 +60,7 @@ int **copy_in_lpath(int **paths, int k)
 	return (found_path);
 }
 
-int **find_another(int **paths, int start, int end)
+int 	**find_another(int **paths, int start, int end)
 {
 	FA;
 	while (paths[++k])
@@ -89,7 +89,7 @@ int **find_another(int **paths, int start, int end)
 	return (found_path);
 }
 
-void copy_back(void)
+void 	copy_back(void)
 {
 	int i;
 	int j;

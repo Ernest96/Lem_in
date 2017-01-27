@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strsplit.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dprovorn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/01/27 16:03:44 by dprovorn          #+#    #+#             */
+/*   Updated: 2017/01/27 16:04:13 by dprovorn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
 short	is_ok(char c, char ok)
@@ -34,7 +46,7 @@ int		get_size(char const *str, int i, char ok)
 	return (size);
 }
 
-char			**ft_strsplit(char const *str, char ok)
+char	**ft_strsplit(char const *str, char ok)
 {
 	char	**tab;
 	int		i[4];

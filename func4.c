@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   func4.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dprovorn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/01/27 16:06:36 by dprovorn          #+#    #+#             */
+/*   Updated: 2017/01/27 16:07:23 by dprovorn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
 void	ft_free_list(t_room **head)
@@ -23,7 +35,7 @@ void	ft_init_node(t_room **temp, char **str)
 	(*temp)->next = NULL;
 }
 
-char 	**ft_split_check(char *line)
+char	**ft_split_check(char *line)
 {
 	char **str;
 
@@ -46,7 +58,7 @@ void	ft_free_split(char ***str)
 	i = -1;
 	while (*(*str + ++i))
 		free(*(*str + i));
-	free (*str);		
+	free(*str);
 }
 
 void	ft_init_head(t_room **head, char **str, int8_t flag)

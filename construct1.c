@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   construct1.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dprovorn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/01/27 15:59:20 by dprovorn          #+#    #+#             */
+/*   Updated: 2017/01/27 16:01:05 by dprovorn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
 void	ft_init_start_end(t_room **head, char *line, int8_t flag)
@@ -24,7 +36,7 @@ void	ft_init_start_end(t_room **head, char *line, int8_t flag)
 		prev = temp;
 		temp = temp->next;
 	}
-	ft_init_node(&prev,str);
+	ft_init_node(&prev, str);
 	prev->type = flag;
 	ft_free_split(&str);
 }
@@ -59,7 +71,7 @@ void	ft_init_room(t_room **head, char *line)
 
 void	ft_create_array(t_room *room)
 {
-	t_room 	*temp;
+	t_room	*temp;
 	short	i;
 
 	temp = room;
@@ -85,11 +97,11 @@ void	ft_create_array(t_room *room)
 	g_rel = 1;
 }
 
-t_room *get_farm(int *furn)
+t_room	*get_farm(int *furn)
 {
 	VAR_INIT_2;
-	while(get_next_line(0, &line))
-	{	
+	while (get_next_line(0, &line))
+	{
 		if (flag == -1)
 		{
 			F1;
@@ -100,7 +112,7 @@ t_room *get_farm(int *furn)
 			;
 		else if (!ft_strcmp(line, "##start") && !g_rel)
 			ft_check_command(&flag, 1);
-		else if(!ft_strcmp(line, "##end") && !g_rel)
+		else if (!ft_strcmp(line, "##end") && !g_rel)
 			ft_check_command(&flag, 2);
 		else if (!flag)
 			ft_init_room(&head, line);

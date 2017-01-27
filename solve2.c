@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   solve2.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dprovorn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/01/27 16:13:36 by dprovorn          #+#    #+#             */
+/*   Updated: 2017/01/27 16:15:32 by dprovorn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
 void	dijkstra(int **d, int start, int end)
@@ -21,7 +33,7 @@ void	dijkstra(int **d, int start, int end)
 				else
 					d[k][i] = d[k - 1][i];
 			v = find_min(d[k], marked, m);
-		}	
+		}
 	}
 	--g_m;
 	g_path[g_p++] = start;
@@ -31,15 +43,15 @@ void	dijkstra(int **d, int start, int end)
 
 int		ft_check_solution_1(int start, int end, int *path)
 {
-	if(*path== start && *(path + 1) == end)
+	if (*path == start && *(path + 1) == end)
 		if (g_temp[start][end] == 9999)
 			return (0);
-	return(1);
+	return (1);
 }
 
 int		ft_check_solution_2(int start, int end, int *path)
 {
-	if(*(path + 1) == start && *(path + 2) == end)
+	if (*(path + 1) == start && *(path + 2) == end)
 	{
 		if (g_temp[start][end] == 9999)
 			return (0);
@@ -47,7 +59,7 @@ int		ft_check_solution_2(int start, int end, int *path)
 	return (1);
 }
 
-int 	**ft_init_path(int start)
+int		**ft_init_path(int start)
 {
 	int **paths;
 	int i;
@@ -60,10 +72,9 @@ int 	**ft_init_path(int start)
 	while (++j < g_count)
 		if (g_temp[start][j] == 1)
 			++n;
-
 	paths = (int**)malloc(sizeof(int *) * (n + 1));
 	j = -1;
-	*paths  = (int*)malloc(sizeof(int) * (g_count + 1));
+	*paths = (int*)malloc(sizeof(int) * (g_count + 1));
 	paths[0][0] = g_p;
 	while (++i <= g_p)
 		paths[0][i] = g_path[i - 1];

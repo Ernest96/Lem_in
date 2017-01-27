@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   func6.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dprovorn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/01/27 16:07:45 by dprovorn          #+#    #+#             */
+/*   Updated: 2017/01/27 16:08:38 by dprovorn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
 int8_t	ft_first_check(char *line)
@@ -28,17 +40,17 @@ void	ft_check_possible(t_room *head)
 		ft_error();
 }
 
-void	ft_res_array()
+void	ft_res_array(void)
 {
 	int i;
 	int j;
 
 	i = -1;
-	while(++i < g_count)
+	while (++i < g_count)
 	{
 		j = -1;
-		while(++j < g_count)
-			if ( i!= j)
+		while (++j < g_count)
+			if (i != j)
 				g_tab[i][j] = 9999;
 			else
 				g_tab[i][j] = 0;
@@ -52,11 +64,11 @@ void	ft_insert(char **str)
 	int n;
 
 	i = -1;
-	while(++i < g_count)
+	while (++i < g_count)
 	{
-		if(!ft_strcmp(*str, g_names[i]))
+		if (!ft_strcmp(*str, g_names[i]))
 			m = i;
-		if(!ft_strcmp(*(str + 1), g_names[i]))
+		if (!ft_strcmp(*(str + 1), g_names[i]))
 			n = i;
 	}
 	if (n != m)

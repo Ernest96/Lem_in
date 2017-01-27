@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lem_in.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dprovorn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/01/27 16:10:34 by dprovorn          #+#    #+#             */
+/*   Updated: 2017/01/27 16:11:54 by dprovorn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
 int	ft_simulate(int **paths, int furn, int end, int8_t param)
@@ -19,7 +31,7 @@ int	ft_simulate(int **paths, int furn, int end, int8_t param)
 						C2;
 					}
 				}
-				CHECK;
+			CHECK;
 		}
 		TO_PRINT;
 	}
@@ -27,14 +39,12 @@ int	ft_simulate(int **paths, int furn, int end, int8_t param)
 	return (step);
 }
 
-
-
 int	main(void)
 {
-	VAR_INIT_1;
 	int start;
 	int end;
 
+	VAR_INIT_1;
 	head = get_farm(&furn);
 	if (!g_rel)
 		ft_error();

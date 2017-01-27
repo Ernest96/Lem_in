@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   solve3.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dprovorn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/01/27 18:11:53 by dprovorn          #+#    #+#             */
+/*   Updated: 2017/01/27 18:19:06 by dprovorn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
 void	ft_put_change(int coord)
@@ -9,7 +21,7 @@ void	ft_put_change(int coord)
 	ft_putchar(' ');
 }
 
-void 	mark_node(int **paths, int option, int to_mark, int prev)
+void	mark_node(int **paths, int option, int to_mark, int prev)
 {
 	int k;
 	int i;
@@ -35,14 +47,14 @@ void 	mark_node(int **paths, int option, int to_mark, int prev)
 	}
 }
 
-int 	**copy_in_lpath(int **paths, int k)
+int		**copy_in_lpath(int **paths, int k)
 {
 	int i;
 	int j;
 	int **found_path;
 
 	i = -1;
-	found_path = (int**)malloc(sizeof(int*)*(k + 1));
+	found_path = (int**)malloc(sizeof(int*) * (k + 1));
 	while (++i < k)
 		found_path[i] = (int*)malloc(sizeof(int) * g_count);
 	i = -1;
@@ -60,7 +72,7 @@ int 	**copy_in_lpath(int **paths, int k)
 	return (found_path);
 }
 
-int 	**find_another(int **paths, int start, int end)
+int		**find_another(int **paths, int start, int end)
 {
 	FA;
 	while (paths[++k])
@@ -72,33 +84,32 @@ int 	**find_another(int **paths, int start, int end)
 		{
 			m = 1;
 			while (++m < paths[j][0])
-			{
 				if (paths[k - 1][i] == paths[j][m])
 				{
 					mark_node(paths, 1, paths[j][m], paths[k - 1][i - 1]);
 					g_p = 0;
 					g_path[g_p++] = start;
 					dijkstra(g_d, paths[k - 1][2], end);
-					for(int i = 0; i < g_p; i++)
-					if (!(g_path[2] == end))
-						found_path = copy_in_lpath(paths, k);
+					w = -1;
+					while (++w < g_p)
+						if (!(g_path[2] == end))
+							found_path = copy_in_lpath(paths, k);
 				}
-			}
 		}
 	}
 	return (found_path);
 }
 
-void 	copy_back(void)
+void	copy_back(void)
 {
 	int i;
 	int j;
 
 	i = -1;
-	while(++i < g_count)
+	while (++i < g_count)
 	{
 		j = -1;
-		while(++j < g_count)
+		while (++j < g_count)
 			g_temp[i][j] = g_tab[i][j];
 	}
 }

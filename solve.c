@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   solve.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dprovorn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/01/27 16:12:00 by dprovorn          #+#    #+#             */
+/*   Updated: 2017/01/27 16:13:28 by dprovorn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
 int		find_min(int *d, int8_t *marked, int *m)
@@ -8,12 +20,12 @@ int		find_min(int *d, int8_t *marked, int *m)
 
 	min = INT_MAX;
 	i = -1;
-	while (++i < g_count)	
+	while (++i < g_count)
 		if (d[i] < min && marked[i] == 0)
-			{
-				v = i;
-				min = d[i];
-			}
+		{
+			v = i;
+			min = d[i];
+		}
 	m[g_m++] = v;
 	marked[v] = 1;
 	return (v);
@@ -32,7 +44,7 @@ void	find_path(int **d, int vert, int i, int *m)
 		find_path(d, vert - 1, i, m);
 }
 
-int 	*get_m()
+int		*get_m(void)
 {
 	int i;
 	int *m;
@@ -44,9 +56,9 @@ int 	*get_m()
 	return (m);
 }
 
-int8_t 	*get_marked()
+int8_t	*get_marked(void)
 {
-	int 	i;
+	int		i;
 	int8_t	*marked;
 
 	marked = (int8_t*)malloc(sizeof(int8_t) * g_count);
